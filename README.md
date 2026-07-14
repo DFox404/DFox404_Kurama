@@ -33,14 +33,16 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/kurama-engine.git
-cd kurama-engine
+git clone https://github.com/DFox404/DFox404_Kurama.git
+cd DFox404_Kurama
+chmod +x setup.sh
+bash setup.sh
 
 # Install dependencies
 pip install flask flask-socketio aiohttp requests
 
 # Run engine
-python server.py
+kurama
 ```
 
 Open browser: http://localhost:5000
