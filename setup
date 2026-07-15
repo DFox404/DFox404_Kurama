@@ -1,0 +1,188 @@
+#!/bin/bash
+# ============================================================
+# KURAMA ENGINE v5.0 - Setup Only (No Copy)
+# ============================================================
+
+clear
+
+echo ""
+echo "  ╔══════════════════════════════════════╗"
+echo "  ║        KURAMA ENGINE v5.0            ║"
+echo "  ║        Setup & Permissions           ║"
+echo "  ╚══════════════════════════════════════╝"
+echo ""
+
+# Colors
+R='\033[91m'
+G='\033[92m'
+Y='\033[93m'
+C='\033[96m'
+W='\033[0m'
+
+# Paths
+INSTALL_DIR="/data/data/com.termux/files/home/fox"
+BIN_PATH="/data/data/com.termux/files/usr/bin/kurama"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Error handling function
+error_exit() {
+    echo -e "\n${R}╔══════════════════════════════════════╗${W}"
+    echo -e "${R}║         SETUP FAILED!               ║${W}"
+    echo -e "${R}╚══════════════════════════════════════╝${W}"
+    echo -e "${R}[✘] ERROR: $1${W}"
+    echo -e "${Y}[!] Please fix the issue and run again.${W}"
+    exit 1
+}
+
+success_msg() {
+    echo -e "  ${G}[✓] $1${W}"
+}
+
+warning_msg() {
+    echo -e "  ${Y}[!] $1${W}"
+}
+
+# Step 1: Check Termux
+echo -e "${C}[*] Checking environment...${W}"
+if [ -d "/data/data/com.termux" ]; then
+    success_msg "Termux detected"
+else
+    error_exit "Termux not detected! This script must run in Termux."
+fi
+
+# Step 2: Check internet connection
+echo -e "\n${C}[*] Checking internet connection...${W}"
+if ping -c 1 google.com &>/dev/null || ping -c 1 8.8.8.8 &>/dev/null; then
+    success_msg "Internet connection available"
+else
+    warning_msg "No internet connection detected. Skipping dependency installation."
+    SKIP_DEPENDENCIES=true
+fi
+
+# Step 3: Install dependencies
+echo -e "\n${C}[*] Installing dependencies...${W}"
+if [ "$SKIP_DEPENDENCIES" != true ]; then
+    echo -e "  ${Y}[*] Updating packages...${W}"
+    if pkg update -y &>/dev/null; then
+        success_msg "Packages updated"
+    else
+        warning_msg "Failed to update packages. Continuing..."
+    fi
+    
+    echo -e "  ${Y}[*] Installing Python...${W}"
+    if pkg install python -y &>/dev/null; then
+        success_msg "Python installed"
+    else
+        warning_msg "Failed to install Python. Continuing..."
+    fi
+    
+    echo -e "  ${Y}[*] Installing Python packages...${W}"
+    if pip install flask flask-socketio aiohttp requests &>/dev/null; then
+        success_msg "Python packages installed"
+    else
+        warning_msg "Failed to install some Python packages. Continuing..."
+    fi
+else
+    warning_msg "Dependency installation skipped due to no internet."
+fi
+
+# Step 4: Check if 9tails.sh exists
+echo -e "\n${C}[*] Checking main script...${W}"
+if [ -f "$INSTALL_DIR/9tails.sh" ]; then
+    success_msg "9tails.sh found at $INSTALL_DIR"
+else
+    error_exit "9tails.sh not found at $INSTALL_DIR! Please make sure the file exists."
+fi
+
+# Step 5: Create launcher shortcut
+echo -e "\n${C}[*] Creating launcher...${W}"
+if cat > "$BIN_PATH" << 'ENDOFFILE'
+#!/bin/bash
+cd /data/data/com.termux/files/home/fox
+./9tails.sh
+ENDOFFILE
+then
+    success_msg "Launcher file created"
+else
+    error_exit "Failed to create launcher at $BIN_PATH"
+fi
+
+# Step 6: Set permissions for launcher
+echo -e "  ${Y}[*] Setting launcher permissions...${W}"
+if chmod +x "$BIN_PATH" 2>/dev/null; then
+    success_msg "Launcher permissions set: /usr/bin/kurama"
+else
+    error_exit "Failed to set permissions for launcher"
+fi
+
+# Step 7: Set permissions for main script
+echo -e "\n${C}[*] Setting permissions for main script...${W}"
+if chmod +x "$INSTALL_DIR/9tails.sh" 2>/dev/null; then
+    success_msg "Permissions set for 9tails.sh"
+else
+    error_exit "Failed to set permissions for 9tails.sh"
+fi
+
+# Step 8: Set permissions for all other scripts in the same directory
+echo -e "\n${C}[*] Setting permissions for all scripts in $INSTALL_DIR...${W}"
+SCRIPT_COUNT=0
+for script in "$INSTALL_DIR"/*.sh; do
+    if [ -f "$script" ]; then
+        if chmod +x "$script" 2>/dev/null; then
+            success_msg "Permissions set for $(basename "$script")"
+            ((SCRIPT_COUNT++))
+        else
+            warning_msg "Failed to set permissions for $(basename "$script")"
+        fi
+    fi
+done
+
+if [ $SCRIPT_COUNT -eq 0 ]; then
+    warning_msg "No .sh scripts found in $INSTALL_DIR"
+else
+    success_msg "Total $SCRIPT_COUNT script(s) processed"
+fi
+
+# Step 9: Verify launcher works
+echo -e "\n${C}[*] Verifying installation...${W}"
+if [ -x "$BIN_PATH" ]; then
+    success_msg "Launcher is executable"
+else
+    warning_msg "Launcher is not executable. Try: chmod +x $BIN_PATH"
+fi
+
+if [ -x "$INSTALL_DIR/9tails.sh" ]; then
+    success_msg "Main script is executable"
+else
+    warning_msg "Main script is not executable. Try: chmod +x $INSTALL_DIR/9tails.sh"
+fi
+
+# Step 10: Check PATH
+echo -e "\n${C}[*] Checking PATH...${W}"
+if echo "$PATH" | grep -q "/data/data/com.termux/files/usr/bin"; then
+    success_msg "PATH includes /usr/bin"
+else
+    warning_msg "PATH does not include /usr/bin. You may need to restart Termux."
+fi
+
+# Step 11: Done
+echo ""
+echo -e "${G}  ╔══════════════════════════════════════╗${W}"
+echo -e "${G}  ║      SETUP COMPLETE!                ║${W}"
+echo -e "${G}  ╚══════════════════════════════════════╝${W}"
+echo ""
+echo -e "  ${C}Installation Summary:${W}"
+echo -e "    ${Y}• Main Script:${W} $INSTALL_DIR/9tails.sh"
+echo -e "    ${Y}• Launcher:${W} $BIN_PATH"
+echo -e "    ${Y}• Scripts Found:${W} $SCRIPT_COUNT"
+echo -e "    ${Y}• Status:${W} ${G}Ready to use${W}"
+echo ""
+echo -e "  ${C}Usage:${W}"
+echo -e "    ${Y}kurama${W}  # Start engine from anywhere"
+echo -e "    ${Y}cd $INSTALL_DIR && ./9tails.sh${W}"
+echo ""
+echo -e "  ${C}Test Commands:${W}"
+echo -e "    ${Y}which kurama${W}  # Check if launcher is in PATH"
+echo -e "    ${Y}ls -la $BIN_PATH${W}  # Check launcher permissions"
+echo -e "    ${Y}ls -la $INSTALL_DIR/*.sh${W}  # Check all scripts permissions"
+echo ""
