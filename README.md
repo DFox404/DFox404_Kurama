@@ -32,16 +32,19 @@
 ## 🚀 Quick Start
 
 ```bash
-# Clone repository
-git clone https://github.com/DFox404/DFox404_Kurama.git
-cd DFox404_Kurama
-chmod +x setup.sh
-bash setup.sh
-
-# Install dependencies
-pip install flask flask-socketio aiohttp requests
-
-# Run engine
+git clone https://github.com/DFox404/fox.git
+```
+```bash
+cd fox
+```
+```bash
+chmod +x setup
+```
+```bash
+./setup
+```
+### Start Engine 
+```bash
 kurama
 ```
 
