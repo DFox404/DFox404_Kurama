@@ -60,7 +60,6 @@
             padding-bottom: calc(100px + var(--safe-bottom));
         }
 
-        /* Top Bar */
         .top-bar {
             display: flex;
             align-items: center;
@@ -140,7 +139,6 @@
         .running .status-dot { animation: dotPulse 0.8s infinite; }
         @keyframes dotPulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-        /* Tab Navigation */
         .tab-nav {
             display: flex;
             gap: 2px;
@@ -171,7 +169,6 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -214,7 +211,6 @@
         .color-accent { color: var(--accent); }
         .color-success { color: var(--success); }
 
-        /* Chart */
         .chart-panel {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -234,7 +230,6 @@
         }
         canvas { width: 100%; height: 160px; border-radius: var(--radius-sm); }
 
-        /* Panels */
         .panel {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -254,7 +249,6 @@
             gap: 8px;
         }
 
-        /* Form Elements */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
         .form-group.full { grid-column: 1 / -1; }
@@ -292,7 +286,6 @@
             padding-right: 30px;
         }
 
-        /* Toggle */
         .toggle-row {
             display: flex;
             align-items: center;
@@ -326,7 +319,6 @@
         }
         .toggle.active::after { left: 22px; }
 
-        /* Buttons */
         .btn {
             padding: 12px 20px;
             border: 1px solid var(--border);
@@ -361,7 +353,6 @@
         .btn-block { width: 100%; }
         .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
 
-        /* Live Feed */
         .feed-container {
             max-height: 350px;
             overflow-y: auto;
@@ -393,7 +384,6 @@
             word-break: break-all;
         }
 
-        /* Badges */
         .badges {
             display: flex;
             flex-wrap: wrap;
@@ -415,7 +405,6 @@
         .badge-5xx { background: var(--danger-subtle); color: var(--accent); border: 1px solid var(--accent); }
         .badge-err { background: var(--danger-subtle); color: var(--accent); border: 1px solid var(--accent); }
 
-        /* Bottom Bar */
         .bottom-bar {
             position: fixed;
             bottom: 0;
@@ -432,7 +421,6 @@
             align-items: center;
         }
 
-        /* Toast */
         .toast-container {
             position: fixed;
             top: 14px;
@@ -503,12 +491,11 @@
 
     <div class="app-container">
 
-        <!-- Top Bar -->
         <div class="top-bar">
             <div class="brand">
                 <div class="logo"><i class="fas fa-skull"></i></div>
                 <h1>KURAMA</h1>
-                <span class="version">v5.0</span>
+                <span class="version" id="versionBadge">v5.0</span>
             </div>
             <div class="status-indicator idle" id="statusIndicator">
                 <span class="status-dot"></span>
@@ -516,7 +503,6 @@
             </div>
         </div>
 
-        <!-- Tab Navigation -->
         <div class="tab-nav" id="tabNav">
             <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
             <button class="tab-btn" data-tab="config">Config</button>
@@ -524,7 +510,6 @@
             <button class="tab-btn" data-tab="results">Export</button>
         </div>
 
-        <!-- Dashboard Tab -->
         <div class="tab-content active" id="tab-dashboard">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -549,7 +534,6 @@
                 </div>
             </div>
 
-            <!-- Chart -->
             <div class="chart-panel">
                 <div class="chart-header">
                     <span>Request Rate</span>
@@ -557,7 +541,6 @@
                 <canvas id="rpsChart"></canvas>
             </div>
 
-            <!-- Live Feed -->
             <div class="panel">
                 <div class="panel-title">
                     <i class="fas fa-terminal color-accent"></i> Live Feed
@@ -571,7 +554,6 @@
             </div>
         </div>
 
-        <!-- Config Tab -->
         <div class="tab-content" id="tab-config">
             <div class="panel">
                 <div class="panel-title">
@@ -612,11 +594,10 @@
             </div>
         </div>
 
-        <!-- Advanced Tab -->
         <div class="tab-content" id="tab-advanced">
             <div class="panel">
                 <div class="panel-title">
-                    <i class="fas fa-cog color-warning"></i> Advanced Settings
+                    <i class="fas fa-cog" style="color:var(--warning);"></i> Advanced Settings
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
@@ -655,11 +636,10 @@
             </div>
         </div>
 
-        <!-- Export Tab -->
         <div class="tab-content" id="tab-results">
             <div class="panel">
                 <div class="panel-title">
-                    <i class="fas fa-file-export color-success"></i> Export Results
+                    <i class="fas fa-file-export" style="color:var(--success);"></i> Export Results
                 </div>
                 <div class="btn-group" style="margin-bottom:12px;">
                     <button class="btn btn-secondary btn-sm" onclick="exportResults('json')">
@@ -676,7 +656,6 @@
         </div>
     </div>
 
-    <!-- Bottom Action Bar -->
     <div class="bottom-bar">
         <button class="btn btn-attack btn-block" id="startBtn" style="flex:2;">
             <i class="fas fa-bolt"></i> Launch Attack
@@ -691,388 +670,234 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js"></script>
     <script>
-        const socket = io({ reconnection: true, reconnectionAttempts: Infinity, reconnectionDelay: 500 });
+        const socket = io({reconnection:true,reconnectionAttempts:Infinity,reconnectionDelay:500,transports:['websocket','polling']});
 
-        const AppState = {
-            isRunning: false, isPaused: false,
-            toggleStates: { verifySSL: false, followRedirects: false, keepAlive: false },
-            chartData: [], maxChartPoints: 60,
-        };
+        const AppState={isRunning:false,isPaused:false,toggleStates:{verifySSL:false,followRedirects:false,keepAlive:false},chartData:[],maxChartPoints:60,versionData:null};
 
-        function showToast(message, type = 'info') {
-            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-triangle', forbidden: 'fa-ban', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `<i class="fas ${icons[type]}"></i> ${message}`;
-            document.getElementById('toastContainer').appendChild(toast);
-            setTimeout(() => toast.remove(), 2800);
+        function showToast(m,t='info'){
+            const icons={success:'fa-check-circle',error:'fa-exclamation-triangle',forbidden:'fa-ban',warning:'fa-exclamation-triangle',info:'fa-info-circle'};
+            const el=document.createElement('div');el.className=`toast toast-${t}`;
+            el.innerHTML=`<i class="fas ${icons[t]}"></i> ${m}`;
+            document.getElementById('toastContainer').appendChild(el);
+            setTimeout(()=>el.remove(),2800);
         }
 
-        // Tab Navigation
-        document.getElementById('tabNav').addEventListener('click', (e) => {
-            const btn = e.target.closest('.tab-btn');
-            if (!btn) return;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-            if (btn.dataset.tab === 'dashboard') drawChart();
+        document.getElementById('tabNav').addEventListener('click',(e)=>{
+            const b=e.target.closest('.tab-btn');if(!b)return;
+            document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(x=>x.classList.remove('active'));
+            b.classList.add('active');document.getElementById('tab-'+b.dataset.tab).classList.add('active');
+            if(b.dataset.tab==='dashboard')drawChart();
         });
 
-        function toggleSwitch(toggleId, stateKey) {
-            const toggle = document.getElementById(toggleId);
-            AppState.toggleStates[stateKey] = !AppState.toggleStates[stateKey];
-            toggle.classList.toggle('active', AppState.toggleStates[stateKey]);
-            saveConfig();
+        function toggleSwitch(tid,sk){
+            const t=document.getElementById(tid);
+            AppState.toggleStates[sk]=!AppState.toggleStates[sk];
+            t.classList.toggle('active',AppState.toggleStates[sk]);
         }
 
-        function setUIState(running, paused = false) {
-            AppState.isRunning = running;
-            AppState.isPaused = paused;
-            const indicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-            const startBtn = document.getElementById('startBtn');
-            const pauseBtn = document.getElementById('pauseBtn');
-            const stopBtn = document.getElementById('stopBtn');
-
-            if (running && paused) {
-                indicator.className = 'status-indicator paused';
-                statusText.textContent = 'PAUSED';
-                pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
-                pauseBtn.className = 'btn btn-attack btn-sm';
-                pauseBtn.disabled = false; stopBtn.disabled = false;
-                document.title = '[PAUSED] KURAMA ENGINE';
-            } else if (running) {
-                indicator.className = 'status-indicator running';
-                statusText.textContent = 'ATTACKING';
-                pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-                pauseBtn.className = 'btn btn-secondary btn-sm';
-                pauseBtn.disabled = false; stopBtn.disabled = false;
-                document.title = '[LIVE] KURAMA ENGINE';
-            } else {
-                indicator.className = 'status-indicator idle';
-                statusText.textContent = 'IDLE';
-                startBtn.disabled = false;
-                startBtn.innerHTML = '<i class="fas fa-bolt"></i> Launch Attack';
-                pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-                pauseBtn.className = 'btn btn-secondary btn-sm';
-                pauseBtn.disabled = true; stopBtn.disabled = true;
-                document.title = 'KURAMA ENGINE v5.0';
+        function setUIState(r,p=false){
+            AppState.isRunning=r;AppState.isPaused=p;
+            const ind=document.getElementById('statusIndicator'),st=document.getElementById('statusText');
+            const sb=document.getElementById('startBtn'),pb=document.getElementById('pauseBtn'),xb=document.getElementById('stopBtn');
+            if(r&&p){
+                ind.className='status-indicator paused';st.textContent='PAUSED';
+                pb.innerHTML='<i class="fas fa-play"></i> Resume';pb.className='btn btn-attack btn-sm';
+                pb.disabled=false;xb.disabled=false;sb.disabled=true;
+                document.title='[PAUSED] KURAMA ENGINE';
+            }else if(r){
+                ind.className='status-indicator running';st.textContent='ATTACKING';
+                pb.innerHTML='<i class="fas fa-pause"></i> Pause';pb.className='btn btn-secondary btn-sm';
+                pb.disabled=false;xb.disabled=false;sb.disabled=true;
+                document.title='[LIVE] KURAMA ENGINE';
+            }else{
+                ind.className='status-indicator idle';st.textContent='IDLE';
+                sb.disabled=false;sb.innerHTML='<i class="fas fa-bolt"></i> Launch Attack';
+                pb.innerHTML='<i class="fas fa-pause"></i> Pause';pb.className='btn btn-secondary btn-sm';
+                pb.disabled=true;xb.disabled=true;document.title='KURAMA ENGINE v5.0';
             }
         }
 
-        function clearDashboard() {
-            document.getElementById('totalRequests').textContent = '0';
-            document.getElementById('rps').textContent = '0';
-            document.getElementById('successCount').textContent = '0';
-            document.getElementById('failCount').textContent = '0';
-            document.getElementById('avgResponse').textContent = '0';
-            document.getElementById('successRate').textContent = '0%';
-            document.getElementById('failRate').textContent = '0%';
-            document.getElementById('elapsedTime').textContent = '00:00';
-            document.getElementById('statusBadges').innerHTML = '';
-            document.getElementById('liveFeed').innerHTML = '<div class="empty-state">Awaiting connection...</div>';
-            AppState.chartData = [];
-            drawChart();
+        function clearDashboard(){
+            document.getElementById('totalRequests').textContent='0';
+            document.getElementById('rps').textContent='0';
+            document.getElementById('successCount').textContent='0';
+            document.getElementById('failCount').textContent='0';
+            document.getElementById('avgResponse').textContent='0';
+            document.getElementById('successRate').textContent='0%';
+            document.getElementById('failRate').textContent='0%';
+            document.getElementById('elapsedTime').textContent='00:00';
+            document.getElementById('statusBadges').innerHTML='';
+            document.getElementById('liveFeed').innerHTML='<div class="empty-state">Awaiting connection...</div>';
+            AppState.chartData=[];drawChart();
         }
 
-        function updateDashboard(metrics, liveResponses) {
-            const m = metrics || {};
-            document.getElementById('totalRequests').textContent = formatNumber(m.total || 0);
-            document.getElementById('rps').textContent = formatNumber(m.rps || 0);
-            document.getElementById('successCount').textContent = formatNumber(m.success || 0);
-            document.getElementById('failCount').textContent = formatNumber(m.fail || 0);
-            document.getElementById('avgResponse').textContent = m.avg_response_time || 0;
-            const total = m.total || 0;
-            document.getElementById('successRate').textContent = (total > 0 ? ((m.success||0)/total*100).toFixed(1) : 0) + '%';
-            document.getElementById('failRate').textContent = (total > 0 ? ((m.fail||0)/total*100).toFixed(1) : 0) + '%';
-            document.getElementById('elapsedTime').textContent = formatTime(m.elapsed || 0);
-            updateBadges(m.by_status || {}, m.by_error || {});
-            if (liveResponses) updateLiveFeed(liveResponses);
-            if (m.timeline && m.timeline.length > 0) { AppState.chartData = m.timeline; drawChart(); }
+        function updateDashboard(m,lr){
+            const mt=m||{};
+            document.getElementById('totalRequests').textContent=formatNumber(mt.total||0);
+            document.getElementById('rps').textContent=formatNumber(mt.rps||0);
+            document.getElementById('successCount').textContent=formatNumber(mt.success||0);
+            document.getElementById('failCount').textContent=formatNumber(mt.fail||0);
+            document.getElementById('avgResponse').textContent=mt.avg_response_time||0;
+            const t=mt.total||0;
+            document.getElementById('successRate').textContent=(t>0?((mt.success||0)/t*100).toFixed(1):0)+'%';
+            document.getElementById('failRate').textContent=(t>0?((mt.fail||0)/t*100).toFixed(1):0)+'%';
+            document.getElementById('elapsedTime').textContent=formatTime(mt.elapsed||0);
+            updateBadges(mt.by_status||{},mt.by_error||{});
+            if(lr)updateLiveFeed(lr);
+            if(mt.timeline&&mt.timeline.length>0){AppState.chartData=mt.timeline;drawChart();}
         }
 
-        socket.on('stats_update', (data) => {
-            if (data.is_running) {
-                updateDashboard(data, data.live_responses);
-                if (!AppState.isRunning) setUIState(true, data.is_paused||false);
-            }
+        socket.on('stats_update',(d)=>{
+            if(d.is_running){updateDashboard(d,d.live_responses);if(!AppState.isRunning)setUIState(true,d.is_paused||false);}
+            else if(AppState.isRunning){setUIState(false,false);clearDashboard();}
         });
 
-        socket.on('engine_event', (data) => {
-            if (data.type === 'started') { setUIState(true, false); showToast('ATTACK LAUNCHED', 'success'); }
-            else if (data.type === 'stopped') { setUIState(false, false); clearDashboard(); showToast(data.message, 'warning'); }
-            else if (data.type === 'paused') { setUIState(true, true); showToast('ATTACK PAUSED', 'warning'); }
-            else if (data.type === 'resumed') { setUIState(true, false); showToast('ATTACK RESUMED', 'info'); }
+        socket.on('engine_event',(d)=>{
+            if(d.type==='started'){setUIState(true,false);showToast('ATTACK LAUNCHED','success');}
+            else if(d.type==='stopped'){setUIState(false,false);clearDashboard();showToast(d.message,'warning');}
+            else if(d.type==='paused'){setUIState(true,true);showToast('ATTACK PAUSED','warning');}
+            else if(d.type==='resumed'){setUIState(true,false);showToast('ATTACK RESUMED','info');}
         });
 
-       
+        socket.on('engine_stopped',(d)=>{setUIState(false,false);clearDashboard();showToast(`STOPPED: ${d.total} requests`,'warning');});
 
-        socket.on('full_state_sync', (state) => {
-            if (state.is_running) {
-                setUIState(true, state.is_paused || false);
-                if (state.metrics) updateDashboard(state.metrics, state.live_responses);
-            } else {
-                setUIState(false, false);
-            }
+        socket.on('full_state_sync',(s)=>{
+            if(s.is_running){setUIState(true,s.is_paused||false);if(s.metrics)updateDashboard(s.metrics,s.live_responses);}
+            else{setUIState(false,false);}
         });
 
-        function updateBadges(byStatus, byError) {
-            const container = document.getElementById('statusBadges');
-            let html = '';
-            for (const [code, count] of Object.entries(byStatus)) {
-                const codeNum = parseInt(code);
-                let cls = 'badge-err';
-                if (codeNum >= 200 && codeNum < 300) cls = 'badge-2xx';
-                else if (codeNum >= 300 && codeNum < 400) cls = 'badge-3xx';
-                else if (codeNum >= 400 && codeNum < 500) cls = 'badge-4xx';
-                else if (codeNum >= 500) cls = 'badge-5xx';
-                html += `<span class="badge ${cls}">${code}: ${count}</span>`;
+        socket.on('connect',()=>{});
+        socket.on('disconnect',()=>{if(AppState.isRunning)showToast('Connection lost...','error');});
+
+        function updateBadges(bs,be){
+            const c=document.getElementById('statusBadges');let h='';
+            for(const[code,count]of Object.entries(bs)){
+                const n=parseInt(code);let cls='badge-err';
+                if(n>=200&&n<300)cls='badge-2xx';
+                else if(n>=300&&n<400)cls='badge-3xx';
+                else if(n>=400&&n<500)cls='badge-4xx';
+                else if(n>=500)cls='badge-5xx';
+                h+=`<span class="badge ${cls}">${code}: ${count}</span>`;
             }
-            for (const [error, count] of Object.entries(byError)) {
-                html += `<span class="badge badge-err">${error}: ${count}</span>`;
-            }
-            container.innerHTML = html || '<span style="font-size:9px;color:var(--text-muted);">No responses</span>';
+            for(const[err,count]of Object.entries(be))h+=`<span class="badge badge-err">${err}: ${count}</span>`;
+            c.innerHTML=h||'<span style="font-size:9px;color:var(--text-muted);">No responses</span>';
         }
 
-        function updateLiveFeed(responses) {
-            const container = document.getElementById('liveFeed');
-            if (!responses || responses.length === 0) {
-                container.innerHTML = '<div class="empty-state">No responses yet</div>';
-                return;
-            }
-            container.innerHTML = responses.map(r => {
-                if (r.is_info) {
-                    return `<div class="feed-item"><span class="f-status sinfo">[INFO]</span> <span class="f-meta">${formatTimestamp(r.timestamp)}</span> <span>${escapeHtml(r.error||'')}</span></div>`;
-                }
-                if (r.is_error) {
-                    return `<div class="feed-item"><span class="f-status serr">[ERROR]</span> <span class="f-meta">${formatTimestamp(r.timestamp)}</span> <span>${escapeHtml(r.error||'Unknown')}</span></div>`;
-                }
-                const status = r.status || 0;
-                let cls = 'serr';
-                if (status >= 200 && status < 300) cls = 's2xx';
-                else if (status >= 300 && status < 400) cls = 's3xx';
-                else if (status >= 400 && status < 500) cls = 's4xx';
-                else if (status >= 500) cls = 's5xx';
-                
-                let line = `<div class="feed-item">`;
-                line += `<span class="f-status ${cls}">[${status}]</span> `;
-                line += `<span class="f-meta">${formatTimestamp(r.timestamp)} | ${r.time_ms||0}ms | ${formatBytes(r.size||0)}</span> `;
-                if (r.server) line += `<span class="f-meta">| ${r.server}</span>`;
-                if (r.body_preview) line += `<div class="f-body">${escapeHtml(r.body_preview)}</div>`;
-                line += `</div>`;
-                return line;
+        function updateLiveFeed(rs){
+            const c=document.getElementById('liveFeed');
+            if(!rs||rs.length===0){c.innerHTML='<div class="empty-state">No responses yet</div>';return;}
+            c.innerHTML=rs.map(r=>{
+                if(r.is_info)return`<div class="feed-item"><span class="f-status sinfo">[INFO]</span> <span class="f-meta">${formatTimestamp(r.timestamp)}</span> <span>${esc(r.error||'')}</span></div>`;
+                if(r.is_error)return`<div class="feed-item"><span class="f-status serr">[ERROR]</span> <span class="f-meta">${formatTimestamp(r.timestamp)}</span> <span>${esc(r.error||'Unknown')}</span></div>`;
+                const s=r.status||0;let cls='serr';
+                if(s>=200&&s<300)cls='s2xx';else if(s>=300&&s<400)cls='s3xx';else if(s>=400&&s<500)cls='s4xx';else if(s>=500)cls='s5xx';
+                let l=`<div class="feed-item"><span class="f-status ${cls}">[${s}]</span> <span class="f-meta">${formatTimestamp(r.timestamp)} | ${r.time_ms||0}ms | ${formatBytes(r.size||0)}</span>`;
+                if(r.server)l+=`<span class="f-meta"> | ${r.server}</span>`;
+                if(r.body_preview)l+=`<div class="f-body">${esc(r.body_preview)}</div>`;
+                return l+'</div>';
             }).join('');
         }
 
-        function drawChart() {
-            const canvas = document.getElementById('rpsChart');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const dpr = window.devicePixelRatio || 1;
-            const rect = canvas.parentElement.getBoundingClientRect();
-            canvas.width = rect.width * dpr;
-            canvas.height = 160 * dpr;
-            canvas.style.width = rect.width + 'px';
-            canvas.style.height = '160px';
-            ctx.scale(dpr, dpr);
-            const w = rect.width, h = 160;
-            const pad = { top: 10, right: 10, bottom: 20, left: 50 };
-            const pw = w - pad.left - pad.right, ph = h - pad.top - pad.bottom;
-            ctx.clearRect(0, 0, w, h);
-            ctx.fillStyle = '#0d0d0d';
-            ctx.beginPath(); ctx.roundRect(pad.left, pad.top, pw, ph, 6); ctx.fill();
-            
-            if (AppState.chartData.length === 0) {
-                ctx.fillStyle = '#555'; ctx.font = '10px monospace'; ctx.textAlign = 'center';
-                ctx.fillText('No data', pad.left + pw/2, pad.top + ph/2);
-                return;
-            }
-            
-            const maxVal = Math.max(...AppState.chartData.map(d => d.count), 5);
-            ctx.strokeStyle = '#1f1f1f'; ctx.lineWidth = 0.5;
-            for (let i = 0; i <= 4; i++) {
-                const y = pad.top + (ph / 4) * i;
-                ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + pw, y); ctx.stroke();
-                ctx.fillStyle = '#555'; ctx.font = '9px monospace'; ctx.textAlign = 'right';
-                ctx.fillText(Math.round(maxVal - (maxVal/4)*i), pad.left-6, y+3);
-            }
-            
-            if (AppState.chartData.length > 1) {
-                const stepX = pw / (AppState.maxChartPoints - 1);
-                ctx.beginPath(); ctx.strokeStyle = '#ff3333'; ctx.lineWidth = 2;
-                AppState.chartData.forEach((p, i) => {
-                    const x = pad.left + i*stepX, y = pad.top + ph - (p.count/maxVal)*ph;
-                    i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-                });
-                ctx.stroke();
-                ctx.lineTo(pad.left+(AppState.chartData.length-1)*stepX, pad.top+ph);
-                ctx.lineTo(pad.left, pad.top+ph); ctx.closePath();
-                const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top+ph);
-                grad.addColorStop(0, 'rgba(255,51,51,0.2)'); grad.addColorStop(1, 'rgba(255,51,51,0)');
-                ctx.fillStyle = grad; ctx.fill();
+        function drawChart(){
+            const cv=document.getElementById('rpsChart');if(!cv)return;
+            const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1;
+            const rect=cv.parentElement.getBoundingClientRect();
+            cv.width=rect.width*dpr;cv.height=160*dpr;cv.style.width=rect.width+'px';cv.style.height='160px';
+            ctx.scale(dpr,dpr);
+            const w=rect.width,h=160,pad={top:10,right:10,bottom:20,left:50};
+            const pw=w-pad.left-pad.right,ph=h-pad.top-pad.bottom;
+            ctx.clearRect(0,0,w,h);ctx.fillStyle='#0d0d0d';
+            ctx.beginPath();ctx.roundRect(pad.left,pad.top,pw,ph,6);ctx.fill();
+            if(AppState.chartData.length===0){ctx.fillStyle='#555';ctx.font='10px monospace';ctx.textAlign='center';ctx.fillText('No data',pad.left+pw/2,pad.top+ph/2);return;}
+            const maxVal=Math.max(...AppState.chartData.map(d=>d.count),5);
+            ctx.strokeStyle='#1f1f1f';ctx.lineWidth=0.5;
+            for(let i=0;i<=4;i++){const y=pad.top+(ph/4)*i;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(pad.left+pw,y);ctx.stroke();ctx.fillStyle='#555';ctx.font='9px monospace';ctx.textAlign='right';ctx.fillText(Math.round(maxVal-(maxVal/4)*i),pad.left-6,y+3);}
+            if(AppState.chartData.length>1){
+                const stepX=pw/(AppState.maxChartPoints-1);
+                ctx.beginPath();ctx.strokeStyle='#ff3333';ctx.lineWidth=2;
+                AppState.chartData.forEach((p,i)=>{const x=pad.left+i*stepX,y=pad.top+ph-(p.count/maxVal)*ph;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+                ctx.stroke();ctx.lineTo(pad.left+(AppState.chartData.length-1)*stepX,pad.top+ph);ctx.lineTo(pad.left,pad.top+ph);ctx.closePath();
+                const grad=ctx.createLinearGradient(0,pad.top,0,pad.top+ph);grad.addColorStop(0,'rgba(255,51,51,0.2)');grad.addColorStop(1,'rgba(255,51,51,0)');ctx.fillStyle=grad;ctx.fill();
             }
         }
-        window.addEventListener('resize', drawChart);
+        window.addEventListener('resize',drawChart);
 
-        function formatNumber(num) {
-            if (num >= 1000000) return (num/1000000).toFixed(1)+'M';
-            if (num >= 1000) return (num/1000).toFixed(1)+'K';
-            return num.toString();
-        }
-        function formatTime(seconds) {
-            const m = Math.floor(seconds/60), s = Math.floor(seconds%60);
-            return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-        }
-        function formatTimestamp(ts) {
-            if (!ts) return '';
-            const d = new Date(ts*1000);
-            return d.toLocaleTimeString('en-US', {hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
-        }
-        function formatBytes(bytes) {
-            if (!bytes || bytes === 0) return '0B';
-            if (bytes < 1024) return bytes+'B';
-            if (bytes < 1048576) return (bytes/1024).toFixed(1)+'KB';
-            return (bytes/1048576).toFixed(1)+'MB';
-        }
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text || '';
-            return div.innerHTML;
-        }
+        function formatNumber(n){if(n>=1000000)return(n/1000000).toFixed(1)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return n.toString();}
+        function formatTime(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;}
+        function formatTimestamp(ts){if(!ts)return'';const d=new Date(ts*1000);return d.toLocaleTimeString('en-US',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+        function formatBytes(b){if(!b||b===0)return'0B';if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';}
+        function esc(t){const d=document.createElement('div');d.textContent=t||'';return d.innerHTML;}
 
-        // Buttons
-        document.getElementById('startBtn').addEventListener('click', async () => {
-            const targetUrl = document.getElementById('targetUrl').value.trim();
-            if (!targetUrl) { showToast('Target URL required', 'error'); return; }
-            const config = {
-                target_url: targetUrl,
-                method: document.getElementById('method').value,
-                threads: parseInt(document.getElementById('threads').value)||8,
-                concurrency: parseInt(document.getElementById('concurrency').value)||1500,
-                timeout: parseFloat(document.getElementById('timeout').value)||2.0,
-                request_delay: parseFloat(document.getElementById('requestDelay').value)||0,
-                duration_limit: parseInt(document.getElementById('durationLimit').value)||0,
-                request_limit: parseInt(document.getElementById('requestLimit').value)||0,
-                payloads: document.getElementById('payloads').value,
-                custom_headers: document.getElementById('customHeaders').value||'{}',
-                proxies: document.getElementById('proxies').value,
-                verify_ssl: AppState.toggleStates.verifySSL,
-                follow_redirects: AppState.toggleStates.followRedirects,
-                keep_alive: AppState.toggleStates.keepAlive,
-            };
-            try {
-                document.getElementById('startBtn').disabled = true;
-                document.getElementById('startBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing...';
-                const res = await fetch('/api/start', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(config)});
-                const data = await res.json();
-                if (res.status === 403) {
-                    showToast(data.message || 'FORBIDDEN', 'forbidden');
-                    setUIState(false, false);
-                } else if (!res.ok) {
-                    showToast(data.message||'Failed', 'error');
-                    setUIState(false, false);
-                }
-            } catch(err) { showToast('Error: '+err.message, 'error'); setUIState(false, false); }
-        });
-        document.getElementById('stopBtn').addEventListener('click', async () => {
-            try {
-                document.getElementById('stopBtn').disabled = true;
-                const res = await fetch('/api/stop', {method:'POST'});
-                const data = await res.json();
-                clearDashboard();
-                setUIState(false, false);
-            } catch(err) { showToast('Failed to stop', 'error'); }
-        });
-        document.getElementById('pauseBtn').addEventListener('click', async () => {
-            try {
-                document.getElementById('pauseBtn').disabled = true;
-                await fetch('/api/pause', {method:'POST'});
-            } catch(err) { showToast('Failed', 'error'); }
+        document.getElementById('startBtn').addEventListener('click',async()=>{
+            const tu=document.getElementById('targetUrl').value.trim();
+            if(!tu){showToast('Target URL required','error');return;}
+            const cfg={target_url:tu,method:document.getElementById('method').value,threads:parseInt(document.getElementById('threads').value)||8,concurrency:parseInt(document.getElementById('concurrency').value)||1500,timeout:parseFloat(document.getElementById('timeout').value)||2.0,request_delay:parseFloat(document.getElementById('requestDelay').value)||0,duration_limit:parseInt(document.getElementById('durationLimit').value)||0,request_limit:parseInt(document.getElementById('requestLimit').value)||0,payloads:document.getElementById('payloads').value,custom_headers:document.getElementById('customHeaders').value||'{}',proxies:document.getElementById('proxies').value,verify_ssl:AppState.toggleStates.verifySSL,follow_redirects:AppState.toggleStates.followRedirects,keep_alive:AppState.toggleStates.keepAlive};
+            try{
+                document.getElementById('startBtn').disabled=true;document.getElementById('startBtn').innerHTML='<i class="fas fa-spinner fa-spin"></i> Initializing...';
+                const res=await fetch('/api/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cfg)});
+                const data=await res.json();
+                if(res.status===403){showToast(data.message||'FORBIDDEN','forbidden');setUIState(false,false);}
+                else if(!res.ok){showToast(data.message||'Failed','error');setUIState(false,false);}
+            }catch(err){showToast('Error: '+err.message,'error');setUIState(false,false);}
         });
 
-        async function exportResults(format) {
-            try { window.open(`/api/export?format=${format}`,'_blank'); showToast(`Exporting ${format.toUpperCase()}...`,'info'); }
-            catch(err) { showToast('Export failed','error'); }
-        }
-
-        function saveConfig() {
-            const config = {
-                targetUrl: document.getElementById('targetUrl').value,
-                method: document.getElementById('method').value,
-                threads: document.getElementById('threads').value,
-                concurrency: document.getElementById('concurrency').value,
-                timeout: document.getElementById('timeout').value,
-                payloads: document.getElementById('payloads').value,
-                customHeaders: document.getElementById('customHeaders').value,
-                proxies: document.getElementById('proxies').value,
-                requestDelay: document.getElementById('requestDelay').value,
-                durationLimit: document.getElementById('durationLimit').value,
-                requestLimit: document.getElementById('requestLimit').value,
-                toggleStates: AppState.toggleStates,
-            };
-            localStorage.setItem('Kurama_config', JSON.stringify(config));
-        }
-        function loadConfig() {
-            const saved = localStorage.getItem('Kurama_config');
-            if (!saved) return;
-            try {
-                const c = JSON.parse(saved);
-                if (c.targetUrl) document.getElementById('targetUrl').value = c.targetUrl;
-                if (c.method) document.getElementById('method').value = c.method;
-                if (c.threads) document.getElementById('threads').value = c.threads;
-                if (c.concurrency) document.getElementById('concurrency').value = c.concurrency;
-                if (c.timeout) document.getElementById('timeout').value = c.timeout;
-                if (c.payloads) document.getElementById('payloads').value = c.payloads;
-                if (c.customHeaders) document.getElementById('customHeaders').value = c.customHeaders;
-                if (c.proxies) document.getElementById('proxies').value = c.proxies;
-                if (c.requestDelay) document.getElementById('requestDelay').value = c.requestDelay;
-                if (c.durationLimit) document.getElementById('durationLimit').value = c.durationLimit;
-                if (c.requestLimit) document.getElementById('requestLimit').value = c.requestLimit;
-                if (c.toggleStates) {
-                    AppState.toggleStates = c.toggleStates;
-                    document.getElementById('toggleSSL').classList.toggle('active', c.toggleStates.verifySSL);
-                    document.getElementById('toggleRedirect').classList.toggle('active', c.toggleStates.followRedirects);
-                    document.getElementById('toggleKeepAlive').classList.toggle('active', c.toggleStates.keepAlive);
-                }
-            } catch(e) {}
-        }
-        document.querySelectorAll('input, select, textarea').forEach(el => {
-            el.addEventListener('change', saveConfig);
-            el.addEventListener('input', debounce(saveConfig, 500));
+        document.getElementById('stopBtn').addEventListener('click',async()=>{
+            try{
+                document.getElementById('stopBtn').disabled=true;
+                await fetch('/api/stop',{method:'POST'});
+            }catch(err){showToast('Failed to stop','error');}
         });
-        function debounce(fn, delay) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), delay); }; }
 
-        async function init() {
-            loadConfig();
-            try {
-                const response = await fetch('/api/status');
-                const state = await response.json();
-                if (state.config) {
-                    const cfg = state.config;
-                    document.getElementById('targetUrl').value = cfg.target_url || '';
-                    document.getElementById('method').value = cfg.method || 'POST';
-                    document.getElementById('threads').value = cfg.thread_count || 8;
-                    document.getElementById('concurrency').value = cfg.concurrency || 1500;
-                    document.getElementById('timeout').value = cfg.timeout || 2.0;
-                    document.getElementById('requestDelay').value = cfg.request_delay || 0;
-                    document.getElementById('durationLimit').value = cfg.duration_limit || 0;
-                    document.getElementById('requestLimit').value = cfg.request_limit || 0;
-                    document.getElementById('payloads').value = cfg.payloads || '';
-                    document.getElementById('customHeaders').value = cfg.custom_headers || '{}';
-                    document.getElementById('proxies').value = cfg.proxies || '';
-                    AppState.toggleStates.verifySSL = cfg.verify_ssl || false;
-                    AppState.toggleStates.followRedirects = cfg.follow_redirects || false;
-                    AppState.toggleStates.keepAlive = cfg.keep_alive || false;
-                    document.getElementById('toggleSSL').classList.toggle('active', AppState.toggleStates.verifySSL);
-                    document.getElementById('toggleRedirect').classList.toggle('active', AppState.toggleStates.followRedirects);
-                    document.getElementById('toggleKeepAlive').classList.toggle('active', AppState.toggleStates.keepAlive);
+        document.getElementById('pauseBtn').addEventListener('click',async()=>{
+            try{
+                document.getElementById('pauseBtn').disabled=true;
+                await fetch('/api/pause',{method:'POST'});
+            }catch(err){showToast('Failed','error');}
+        });
+
+        async function exportResults(f){
+            try{window.open(`/api/export?format=${f}`,'_blank');showToast(`Exporting ${f.toUpperCase()}...`,'info');}
+            catch(err){showToast('Export failed','error');}
+        }
+
+        async function fetchVersion(){
+            try{
+                const r=await fetch('/api/version');
+                const d=await r.json();
+                AppState.versionData=d;
+                document.getElementById('versionBadge').textContent='v'+d.current.version;
+                document.getElementById('versionBadge').title=`Code: ${d.current.version_code} | ${d.current.release_type}`;
+            }catch(e){}
+        }
+
+        async function init(){
+            fetchVersion();
+            try{
+                const r=await fetch('/api/status');
+                const s=await r.json();
+                if(s.config){
+                    const c=s.config;
+                    document.getElementById('targetUrl').value=c.target_url||'';
+                    document.getElementById('method').value=c.method||'POST';
+                    document.getElementById('threads').value=c.thread_count||8;
+                    document.getElementById('concurrency').value=c.concurrency||1500;
+                    document.getElementById('timeout').value=c.timeout||2.0;
+                    document.getElementById('requestDelay').value=c.request_delay||0;
+                    document.getElementById('durationLimit').value=c.duration_limit||0;
+                    document.getElementById('requestLimit').value=c.request_limit||0;
+                    document.getElementById('payloads').value=c.payloads||'';
+                    document.getElementById('customHeaders').value=c.custom_headers||'{}';
+                    document.getElementById('proxies').value=c.proxies||'';
+                    AppState.toggleStates.verifySSL=c.verify_ssl||false;
+                    AppState.toggleStates.followRedirects=c.follow_redirects||false;
+                    AppState.toggleStates.keepAlive=c.keep_alive||false;
+                    document.getElementById('toggleSSL').classList.toggle('active',AppState.toggleStates.verifySSL);
+                    document.getElementById('toggleRedirect').classList.toggle('active',AppState.toggleStates.followRedirects);
+                    document.getElementById('toggleKeepAlive').classList.toggle('active',AppState.toggleStates.keepAlive);
                 }
-                if (state.is_running) {
-                    setUIState(true, state.is_paused || false);
-                    if (state.metrics) updateDashboard(state.metrics, state.live_responses);
-                }
-            } catch(e) {}
+                if(s.is_running){setUIState(true,s.is_paused||false);if(s.metrics)updateDashboard(s.metrics,s.live_responses);}
+            }catch(e){}
             drawChart();
         }
         init();
